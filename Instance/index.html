@@ -20,6 +20,10 @@
     <div id="app">
         <h1>{{ title }}</h1>
         <h2>{{ say('World') }}</h2>
+
+        <hr>
+        <h2>{{ value }}</h2>
+        <input type="text" v-on:input="changeValue">
     </div>
     <footer>
         <h1>Footer</h1>
