@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vuejs POM</title>
+    <script src="vue.js"></script>
+    <style>
+        .vuong {
+            width: 100px;
+            height: 100px;
+            background-color: gray;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .do {
+            background-color: red;
+        }
+
+        .xanhduong {
+            background-color: blue;
+        }
+
+        .xanhla {
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="vuong" @click="quanLiDo = !quanLiDo" :class="{do: quanLiDo}"></div>
+        <div class="vuong" :class="{do: quanLiDo}"></div>
+        <!--được hưởng theo bên trên-->
+
+        <div class="vuong" :class="[color, {do:quanLiDo}]"></div>
+        <div class="vuong"></div>
+        <hr>
+        <input type="text" v-model="color">
+    </div>
+    <script>
+        //B1:  Phan biet click gia cac o voi computed,
+        // neu khong phai o thu 3 thi chuyen het sang mau do,
+        // con click vao o 3 thi chuyen sang mai xanh
+
+        //B2: nhap gia tri dung cua phep tinh tong thi
+        // o thu 3 se chuyen sang mau xanh
+        // neu sai o thu 3 chuyen mau do
+        var app = new Vue({
+            el: '#app',
+            data: {
+                quanLiDo: false,
+                color: 'xanhla',
+            },
+            computed: {
+                divClasses: function () {
+                    return {
+                        do: this.quanLiDo,
+                        xanhduong: !this.quanLiDo
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

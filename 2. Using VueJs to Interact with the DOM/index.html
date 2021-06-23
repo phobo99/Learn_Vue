@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vuejs POM</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>{{ noidung }}</p>
+        <p>{{ showPost() }}</p>
+
+
+        <!-- Binding data. Vuejs làm việc với tag của html không làm việc với 
+        các attribute của thẻ tag đó. nếu muốn thì ta phải định nghĩa
+        lại cho attribute bằng v-bind:<attribute> -->
+        <a v-bind:href="link">My facebook</a>
+        <!-- binding cách 2. -->
+        <input type="text" v-model="name">
+        <p>{{ name }}</p>
+
+
+        <!-- v-once sẽ không làm thay đổi  các giá trị sau nó. khi gọi hàm
+        không có v-once thì thẻ p sẽ in ra : Noi dung duoc cap nhat - Noi dung duoc cap nhat -->
+        <p v-once>{{ tieude }} - {{ showVOnce() }}</p>
+        <!-- v-html="  " dùng để ẩn đi các đường link ở đối tượng-->
+        <p v-html="testMaHtml"></p>
+
+        <hr>
+        <!-- v-on lắng nghe sự kiện. sau dấu : sẽ biết được sự kiện làm gì -->
+        <h1>Bấm nút để tăng giá trị</h1>
+        <button v-on:click="tangGiaTri">Ấn để tăng</button>
+        <!-- cách khác: Sức mạnh của vuejs khi dùng code js vào vuejs -->
+        <button v-on:click="dem++">Ấn để tăng theo javascript</button>
+        <p>Giá trị : {{ dem }}</p>
+        <p>Giá trị : {{ dem > 20 ? 'Bạn đã vượt quá mức giới hạn' : 'Bạn vẫn nằm trong giới hạn' }}</p>
+
+        <hr>
+        <div v-on:mousemove="tinhToaDo">
+            Vùng lắng nghe sự kiện(di ra chỗ khác không nhận)
+            <p>Toạ độ của chuột : {{ x }} / {{ y }}</p>
+        </div>
+
+
+        <hr>
+
+
+        <span v-on:mouseover="dungChuot">Dừng sự kiện</span>
+        <span v-on:mouseover.stop="">Dừng sự kiện</span>
+        <hr>
+        <div class="">
+            <input type="text" v-on:keyup.enter="banPhim">
+            <!-- v-on:keyup cho phép nhập vào thì thực hiện function
+                .enter cho phep bạn enter mới thực hiện function
+            hoặc: 
+            <input type="text" @keyup.enter="banPhim">
+                cũng y chang
+             -->
+        </div>
+
+        <hr>
+
+        <p>Giá trị A: {{ tanga }}</p>
+        <p>Giá trị B: {{ tangb }}</p>
+
+        <p>Giá trị A: {{ tanga2() }}</p>
+        <p>Giá trị B: {{ tangb2() }}</p>
+        <button v-on:click="a++">Tăng A</button>
+        <button v-on:click="b++">Tăng B</button>
+
+
+        <hr>
+
+        <p>{{ diem }}</p>
+
+
+    </div>
+    <script>
+        // Tất cả dữ liệu truyền qua HTML đều ở dạng dữ liệu thô (text)
+        var app = new Vue({
+            el: '#app',
+            data: {
+                noidung: 'Chao cac ban',
+                tieude: 'Ble ble ble ble',
+                name: 'Lưu Đặng Phổ',
+                link: 'https://www.facebook.com/phobotkcb',
+                testMaHtml: '<a href="https://www.facebook.com/phobotkcb">Get Profile</a>',
+                dem: 0,
+                x: 0,
+                y: 0,
+                a: 0,
+                b: 0,
+                diem: 'Ban A co mon toan 7 diem'
+            },
+            // Computed thực hiện như một function nhưng nó chỉ được coi là một thuộc tính mà thôi
+            computed: {     //COMPUTED CHẠY TRƯỚC MEHTODS
+                tanga: function () {
+                    // kiểm tra computed hay method chạy trước
+                    console.log("Computed call");
+                    console.log("gọi tới function a");
+                    return this.a;
+                },
+                tangb: function () {
+                    // kiểm tra computed hay method chạy trước
+                    console.log("Computed call");
+                    console.log("gọi tới function b");
+                    return this.b;
+                }
+            },
+            methods: {      //METHODS CHẠY SAU COMPUTED
+                sayHello: function () {
+                    document.write("Hello");
+                },
+                showPost: function () {
+                    // lấy các biến từ các thuộc tính khác trong đối tượng bằng từ
+                    // khoá this
+                    return this.name;
+                },
+                showVOnce: function () {
+                    this.tieude = 'Noi dung duoc cap nhat';
+                    return this.tieude;
+                },
+                tangGiaTri: function () {
+                    this.dem++;
+                },
+                tinhToaDo: function (event) {
+                    this.x = event.clientX;
+                    this.y = event.clientY;
+                },
+                dungChuot: function (event) {
+                    event.stopPropagation();    // Dừng diễn biến của event mouseover
+                },
+                banPhim: function () {
+                    alert("Hello baby!")    // thông báo lên màn hình
+                },
+                tanga2: function () {
+                    // kiểm tra computed hay method chạy trước
+                    console.log("Method call");
+                    console.log("gọi tới function a");
+                    return this.a;
+                },
+                tangb2: function () {
+                    // kiểm tra computed hay method chạy trước
+                    console.log("Method call");
+                    console.log("gọi tới function b");
+                    return this.b;
+                }
+            },
+            // vô tình có giáo viên khác vào nhập điểm môn toán
+            watch: {
+                diem: function(newValue) {
+                    alert("Diem cua ban ay da duoc mot giao vien nao do nhap");
+                }
+            }
+        });
+        app.diem = 'Ban A co mon toan 8 diem';
+    </script>
+</body>
+
+</html>
